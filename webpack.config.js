@@ -1,12 +1,16 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: 'dist',
+    filename: 'don-qa.js',
+    library: 'don-qa',       // 模块名称
+    libraryTarget: 'umd',   // 输出格式
+    umdNamedDefine: true    // 是否将模块名称作为 AMD 输出的命名空间
   },
   module: {
     rules: [
@@ -53,7 +57,25 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: 'dist/*',
+        // to: path.resolve(__dirname, '..', 'pkue/node_modules/vue-pku/'),
+        to: path.resolve(__dirname, '..', 'donCheck/node_modules/don-qa/'),
+        force: true
+      }
+    ], {
+      ignore: [
+        '.DS_Store'
+      ],
+      // By default, we only copy modified files during
+      // a watch or webpack-dev-server build. Setting this
+      // to `true` copies all files.
+      copyUnmodified: true
+    })
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {

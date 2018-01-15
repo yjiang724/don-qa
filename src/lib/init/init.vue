@@ -1,12 +1,13 @@
 <template>
   <pku-form class="form" :inline="inline" :style="{ width: maxlength + 'px' }">
     <pku-form-item v-for="(item, idx) in message" :label="item.label">
-      <component v-bind:is="item.name"  v-bind="item.options" ref="response"></component>
+      <component v-bind:is="item.name" v-bind:data-key="item.key" v-bind="item.options" ref="response"></component>
     </pku-form-item>
     <pku-form-item>
       <pku-button
         class="btn-default"
-        value="重置"></pku-button>
+        value="重置"
+        @callback="onReset"></pku-button>
       <pku-button
         class="btn-primary"
         value="确认"
@@ -31,34 +32,55 @@ export default {
       type: Array,
       default () {
         return [
-          { name: 'pku-input', label: '问卷编号', options: {} },
-          { name: 'pku-input', label: '问卷名称', options: {} },
-          { name: 'pku-select', label: '问卷所属项目', options: {} },
-          { name: 'pku-select', label: '关联调查问卷', options: {} },
-          { name: 'pku-switch', label: '核查问卷类型', options: { ableText: '录音核查', disableText: '电话核查'} },
-          { name: 'pku-textarea', label: '问卷描述', options: {} },
-          { name: 'pku-textarea', label: '欢迎语', options: {} },
-          { name: 'pku-textarea', label: '结束语', options: {} },
+          { name: 'pku-input',  key: 'questionaireID', label: '问卷编号', options: {} },
+          { name: 'pku-input', key: 'questionaireName', label: '问卷名称', options: {} },
+          { name: 'pku-select', key: 'questionaireFrom', label: '问卷所属项目', options: {} },
+          { name: 'pku-select', key: 'questionaireRelated', label: '关联调查问卷', options: {} },
+          { name: 'pku-switch', key: 'questionaireType', label: '核查问卷类型', options: { ableText: '录音核查', disableText: '电话核查' } },
+          { name: 'pku-textarea', key: 'questionaireDes', label: '问卷描述', options: {} },
+          { name: 'pku-textarea', key: 'questionaireWelcome', label: '欢迎语', options: {} },
+          { name: 'pku-textarea', key: 'questionaireEnding', label: '结束语', options: {} }
         ]
       }
     }
   },
-  computed: {
-    refName (id) {
-      return 'ref_' + id
-    }
-  },
   data () {
     return {
-      itemw: 'pku-button'
     }
   },
   methods: {
     onSubmitEventHandler () {
+      let res = {}
+      let idx = 0
       this.$refs.response.forEach(item => {
-        console.log(item)
+        if (item.$options.name === 'pkuSelect') {
+          res[item.$el.dataset.key] = item.valueKey || item.value
+          if ((!item.valueKey && !item.value) || item.value === '请选择') {
+            idx++
+          }
+        } else {
+          if (!item.value) {
+            idx++
+          }
+          res[item.$el.dataset.key] = item.value
+        }
       })
-      console.log('onSubmitEventHandler')
+      if (idx === 0) {
+        // this.$emit('callback', res)
+        this.$emit('callback', JSON.stringify(res))
+      } else {
+        this.$alert('请将表格填写完整', '参数不全', {
+          submit: () => {
+          }
+        })
+      }
+    },
+    onReset () {
+      this.$refs.response.forEach(item => {
+        if (!item.disabled) {
+          item.value = ''
+        }
+      })
     }
   }
 }

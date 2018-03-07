@@ -43,7 +43,7 @@
           :style="styleObj"
           @callback="onSelectEventHandler($event, 2, id, 'b')"></pku-select>
         <transition name="input">
-          <pku-input
+        <pku-input
           message="参数"
           v-show="logic.show"
           :style="styleObj"></pku-input>

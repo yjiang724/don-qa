@@ -1,18 +1,20 @@
 <template>
   <div>
-    <don-qa-question-wrap
-      label="题干">
+    <don-qa-question-wrap label="题目序号">
       <pku-input
-        class="wrap-title"
-        value="访员是否提问了下面这一题相关内容？" 
-        :disabled="true"></pku-input>
+        class="wrap-input"
+        :message="message"
+        ref="input"
+        @change="onInputEventHandler"></pku-input>
     </don-qa-question-wrap>
-    <don-qa-question-wrap
-      label="题目信息">
+    <don-qa-question-wrap label="题干">
       <pku-select
         class="wrap-select"
+        selected="访员是否提问了下面这一题相关内容？"
         :list="title"
         @callback="onSelectEventHandler"></pku-select>
+    </don-qa-question-wrap>
+    <don-qa-question-wrap label="题目选项">
       <pku-radio
         :disabled="true"
         :importKey="importKey"
@@ -22,7 +24,9 @@
     <don-qa-question-wrap>
       <pku-button
         value="保存"
-        :class="{'btn-primary': true, 'btn-disabled': selected === 0}"></pku-button>
+        :class="{'btn-primary': true, 'btn-disabled': selected * input.length === 0}"
+        :disabled="selected * input.length === 0"
+        @callback="onSubmitEventHandler"></pku-button>
     </don-qa-question-wrap>
   </div>
 </template>
@@ -31,6 +35,12 @@
 export default {
   name: 'donQuestionA',
   props: {
+    message: {
+      type: String,
+      default () {
+        return ''
+      }
+    },
     title: {
       type: Array,
       default () {
@@ -58,14 +68,23 @@ export default {
   },
   data () {
     return {
-      selected: 0
+      selected: 0,
+      input: '',
+      select: undefined
     }
   },
   methods: {
+    onInputEventHandler (val) {
+      this.input = val
+    },
     onSelectEventHandler (val) {
       if (val) {
+        this.select = val
         this.selected++
       }
+    },
+    onSubmitEventHandler () {
+      this.$emit('callback', {'questionContent': this.select, 'questionID': this.input})
     }
   }
 }

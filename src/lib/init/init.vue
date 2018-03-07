@@ -1,7 +1,7 @@
 <template>
   <pku-form class="form" :inline="inline" :style="{ width: maxlength + 'px' }">
     <pku-form-item v-for="(item, idx) in message" :label="item.label">
-      <component v-bind:is="item.name" v-bind:data-key="item.key" v-bind="item.options" ref="response"></component>
+      <component v-bind:is="item.name" v-bind:data-key="item.key" v-bind="item.options" ref="response" @callback="onWatchEventHandler($event, item.key)"></component>
     </pku-form-item>
     <pku-form-item>
       <pku-button
@@ -48,7 +48,12 @@ export default {
     return {
     }
   },
+  watch: {
+  },
   methods: {
+    onWatchEventHandler (evt, item) {
+      this.$emit('change', {item, value: evt})
+    },
     onSubmitEventHandler () {
       let res = {}
       let idx = 0
@@ -58,6 +63,8 @@ export default {
           if ((!item.valueKey && !item.value) || item.value === '请选择') {
             idx++
           }
+        } else if (item.$options.name === 'pkuSwitch') {
+          res[item.$el.dataset.key] = item.on
         } else {
           if (!item.value) {
             idx++

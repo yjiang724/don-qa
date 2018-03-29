@@ -1,32 +1,42 @@
 import Vue from 'vue'
-import Init from './lib/init'
-import QuestionA from './lib/question-a'
-import QuestionB from './lib/question-b'
-import QuestionC from './lib/question-c'
-import QuestionD from './lib/question-d'
-import QuestionE from './lib/question-e'
-import QuestionF from './lib/question-f'
-import QuestionG from './lib/question-g'
-import QuestionH from './lib/question-h'
-import QuestionI from './lib/question-i'
-import QuestionJ from './lib/question-j'
-import QuestionWrap from './lib/question-wrap'
-import QuestionLogic from './lib/question-logic'
+import QaInit from './lib/qa-init'
+import QaFill from './lib/qa-fill'
+import QaWrap from './lib/qa-wrap'
+import QaLogic from './lib/qa-logic'
+import QaWelcome from './lib/qa-welcome'
+import QuestionCsA from './lib/qa-questions/question-cs-a'
+import QuestionCsB from './lib/qa-questions/question-cs-b'
+import QuestionCsC from './lib/qa-questions/question-cs-c'
+import QuestionCsD from './lib/qa-questions/question-cs-d'
+import QuestionCsE from './lib/qa-questions/question-cs-e'
+import QuestionCsF from './lib/qa-questions/question-cs-f'
+import QuestionCsG from './lib/qa-questions/question-cs-g'
+import QuestionCsH from './lib/qa-questions/question-cs-h'
+import QuestionCsI from './lib/qa-questions/question-cs-i'
+import QuestionCsJ from './lib/qa-questions/question-cs-j'
+import QuestionInput from './lib/qa-questions/question-input'
+import QuestionRate from './lib/qa-questions/question-rate'
+import QuestionSelect from './lib/qa-questions/question-select'
 
 const components = [
-  Init,
-  QuestionA,
-  QuestionB,
-  QuestionC,
-  QuestionD,
-  QuestionE,
-  QuestionF,
-  QuestionG,
-  QuestionH,
-  QuestionI,
-  QuestionJ,
-  QuestionWrap,
-  QuestionLogic
+  QaInit,
+  QaWrap,
+  QaLogic,
+  QaWelcome,
+  QaFill,
+  QuestionCsA,
+  QuestionCsB,
+  QuestionCsC,
+  QuestionCsD,
+  QuestionCsE,
+  QuestionCsF,
+  QuestionCsG,
+  QuestionCsH,
+  QuestionCsI,
+  QuestionCsJ,
+  QuestionInput,
+  QuestionRate,
+  QuestionSelect
 ]
 
 const install = function(Vue, opts = {}) {
@@ -44,35 +54,45 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 export { 
-  Init,
-  QuestionA,
-  QuestionB,
-  QuestionC,
-  QuestionD,
-  QuestionE,
-  QuestionF,
-  QuestionG,
-  QuestionH,
-  QuestionI,
-  QuestionJ,
-  QuestionWrap,
-  QuestionLogic
+  QaInit,
+  QaWrap,
+  QaLogic,
+  QaWelcome,
+  QaFill,
+  QuestionCsA,
+  QuestionCsB,
+  QuestionCsC,
+  QuestionCsD,
+  QuestionCsE,
+  QuestionCsF,
+  QuestionCsG,
+  QuestionCsH,
+  QuestionCsI,
+  QuestionCsJ,
+  QuestionInput,
+  QuestionRate,
+  QuestionSelect
 }
 
 export default {
   version: '0.0.6',
   install,
-  Init,
-  QuestionA,
-  QuestionB,
-  QuestionC,
-  QuestionD,
-  QuestionE,
-  QuestionF,
-  QuestionG,
-  QuestionH,
-  QuestionI,
-  QuestionJ,
-  QuestionWrap,
-  QuestionLogic
+  QaInit,
+  QaWrap,
+  QaLogic,
+  QaWelcome,
+  QaFill,
+  QuestionCsA,
+  QuestionCsB,
+  QuestionCsC,
+  QuestionCsD,
+  QuestionCsE,
+  QuestionCsF,
+  QuestionCsG,
+  QuestionCsH,
+  QuestionCsI,
+  QuestionCsJ,
+  QuestionInput,
+  QuestionRate,
+  QuestionSelect
 }

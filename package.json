@@ -1,7 +1,7 @@
 {
   "name": "don-qa",
   "description": "A questionnaire UI Toolkit for vue.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "JIANG Yu <look@jiangyu.me>",
   "license": "MIT",
   "private": false,

@@ -1,28 +1,30 @@
 <template>
   <div class="qa-answer-fill">
-    <div v-for="group in options">
-      <div class="qa-answer-wrapper" v-for="item in group">
+    <div v-for="(group, index1) in options">
+      <div class="qa-answer-wrapper" v-for="(item, index2) in group">
         <div class="qa-answer-title">
-          题目: <span v-html="splitTitle(item.quesText)"></span>
+          {{item.quesSn}}: <span v-html="splitTitle(item.quesText)"></span>
           <audio  class="audio"
                   :src="eachFile(item)"
                   v-if="item.quesType === '3000' || item.quesType === '3001' || item.quesType === '3002' || item.quesType === '3003' || item.quesType === '3004' || item.quesType === '3005' || item.quesType === '3006' || item.quesType === '3007' || item.quesType === '3008' || item.quesType === '3009'"
                   controls="controls">Your browser does not support the audio element.</audio>
         </div>
         <div class="qa-answer-content">
-          <component v-if="item.quesType === '3000'" v-bind:is='"donQuestionCsA"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3001'" v-bind:is='"donQuestionCsB"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3002'" v-bind:is='"donQuestionCsC"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3003'" v-bind:is='"donQuestionCsD"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3004'" v-bind:is='"donQuestionCsE"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3005'" v-bind:is='"donQuestionCsF"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3006'" v-bind:is='"donQuestionCsG"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3007'" v-bind:is='"donQuestionCsH"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3008'" v-bind:is='"donQuestionCsI"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '3009'" v-bind:is='"donQuestionCsJ"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '0100'" v-bind:is='"donQuestionInput"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '0600' || item.quesType ==='0601'" v-bind:is='"donQuestionRate"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
-          <component v-if="item.quesType === '0001'" v-bind:is='"donQuestionSelect"' :res="res" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-if="item.quesType === '3000'" v-bind:is='"donQuestionCsA"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3001'" v-bind:is='"donQuestionCsB"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3002'" v-bind:is='"donQuestionCsC"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3003'" v-bind:is='"donQuestionCsD"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3004'" v-bind:is='"donQuestionCsE"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3005'" v-bind:is='"donQuestionCsF"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3006'" v-bind:is='"donQuestionCsG"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3007'" v-bind:is='"donQuestionCsH"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3008'" v-bind:is='"donQuestionCsI"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '3009'" v-bind:is='"donQuestionCsJ"' :options="eachOption(item)" :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '0100'" importType="0100" v-bind:is='"donQuestionInput"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '0102'" importType="0102" v-bind:is='"donQuestionInput"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '0600' || item.quesType ==='0601'" v-bind:is='"donQuestionRate"' :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component> 
+          <component v-else-if="item.quesType === '0001'" v-bind:is='"donQuestionSelect"' :options="eachOption(item)" :res="eachRes(index1, index2)" :fill="true" :disabled="false" ref="res"></component>
+          <component v-else></component>
         </div>
       </div>
     </div>
@@ -64,28 +66,50 @@ export default {
   },
   data () {
     return {
-      // options: JSON.parse(this.groups),
-      // res: [],
       componentName: 'donQuestionCsA'
     }
   },
   computed: {
     options () {
       return JSON.parse(this.groups)
-    },
-    res () {
-      return JSON.parse(this.content)[0]
     }
   },
-  watch: {
-    // groups (val) {
-    //   this.options = JSON.parse(val)
-    // },
-    // content (val) {
-    //   this.res = JSON.parse(val)[0]
-    // }
-  },
+  // watch: {
+  //   // groups (val) {
+  //   //   this.options = JSON.parse(val)
+  //   // },
+  //   // content (val) {
+  //   //   this.res = JSON.parse(val)[0]
+  //   // }
+  // },
   methods: {
+    eachOption (val) {
+      let arr = []
+      val.quesOptionTexts.forEach((item, index) => {
+        arr.push({
+          name: item,
+          value: val.quesOptions[index]
+        })
+      })
+      return arr
+    },
+    eachRes (index1, index2) {
+      let len = 0
+      this.options.forEach((item, index) => {
+        if (index < index1) {
+          len += item.length
+        } else if (index === index1) {
+          len += index2
+        }
+      })
+      let tmp = JSON.parse(this.content)
+      let arr = tmp.filter(item => Number(item.indexForAns) === len)
+      if (arr) {
+        return arr[0]
+      } else {
+        return null
+      }
+    },
     eachFile (item) {
       let tmp = item.quesText.split('____________')
       if (tmp.length > 1) {
@@ -96,17 +120,10 @@ export default {
       tmp = tmp.split('[')
       if (tmp.length > 1) {
         tmp = tmp[1]
-        return this.audio + tmp.substring(0, tmp.length - 1) + '_(0).mp3'
+        return this.audio + '_' + tmp.substring(0, tmp.length - 1) + '(0).mp3'
       } else {
-        // tmp = tmp[0]
         return this.audio + '.mp3'
       }
-      // let tmp = item.quesText.split('____________')[1].split('[')[1]
-      // if (tmp) {
-      //   return this.audio + tmp.substring(0, tmp.length - 1) + '_(0).mp3'
-      // } else {
-      //   return this.audio + '.mp3'
-      // }
     },
     splitTitle (title) {
       return title.split('____________')[0]
@@ -128,19 +145,33 @@ export default {
           delete val.quesTimer
           delete val.quesTipVisible
           delete val.quesRandomized
+          delete val.quesSn
           delete val.colOptions
+          delete val.colOptionTexts
+          delete val.rowOptionTexts
+          delete val.quesOptionTexts
           delete val.colOrders
           delete val.rowOptions
           delete val.rowOrders
           if (val.quesType === '0001') {
-            console.log('选择题 没完成')
+            let num = this.$refs.res[count].$children[0].$data.value
+            val.a = [val.optionOrders[num]]
+            val.b = [val.quesOptions[num]]
+            delete val.optionOrders
+            val.optionOrders = val.a.concat()
+            delete val.quesOptions
+            val.quesOptions = val.b.concat()
+            delete val.a
+            delete val.b
+            res.push(val)
           } else if (val.quesType === '0100') {
             let num = this.$refs.res[count].$children[0].$data.value
-            delete val.optionOrders
+            // delete val.optionOrders
             val.optionOrders = ['0']
-            delete val.quesOptions
+            // delete val.quesOptions
             val.quesOptions = [num]
             res.push(val)
+          } else if (val.quesType === '0102') {
           } else if (val.quesType === '0600' || val.quesType === '0601') {
             let num = this.$refs.res[count].$children[0].$data.voidStart + this.$refs.res[count].$children[0].$data.nowValue
             delete val.optionOrders
@@ -210,7 +241,7 @@ export default {
 }
 .audio {
   position: absolute;
-  top: 8px;
+  bottom: 30px;
   right: 20px;
   display: inline-block;
 }

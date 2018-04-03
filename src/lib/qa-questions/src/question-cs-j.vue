@@ -6,15 +6,24 @@
         ref="input"
         @change="onInputEventHandler"></pku-input>
     </don-qa-question-wrap>
+    <don-qa-question-wrap label="问题组">
+      <pku-select
+        class="wrap-select"
+        selected="选择问题组"
+        :list="array"
+        importKey="quesText"
+        exportKey="questionId"
+        @callback="onGroupEventHandler"></pku-select>
+    </don-qa-question-wrap>
     <don-qa-question-wrap label="题干">
       <pku-select
         class="wrap-select"
         selected="下面这一题，受访者给出的答案是什么？"
+        :list="questions"
+        :html="true"
         importKey="quesText"
         exportKey="questionId"
-        :list="array"
-        :html="true"
-        @callback="onSelectEventHandler"></pku-select>
+        @callback="onQuestionEventHandler"></pku-select>
     </don-qa-question-wrap>
     <don-qa-question-wrap>
       <pku-radio
@@ -26,8 +35,8 @@
     <don-qa-question-wrap>
       <pku-button
         value="保存"
-        :class="{'btn-primary': true, 'btn-disabled': selected * inputSn.length === 0}"
-        :disabled="selected * inputSn.length === 0"
+        :class="{'btn-primary': true, 'btn-disabled': questionID * groupID * inputSn.length === 0}"
+        :disabled="questionID * groupID * inputSn.length === 0"
         @callback="onSubmitEventHandler"></pku-button>
     </don-qa-question-wrap>
   </div>
@@ -50,6 +59,12 @@ export default {
       default: false
     },
     array: {
+      type: Array,
+      default () {
+        return ['题目1', '题目2', '题目3']
+      }
+    },
+    questions: {
       type: Array,
       default () {
         return ['题目1', '题目2', '题目3']
@@ -95,8 +110,21 @@ export default {
     onInputEventHandler (val) {
       this.inputSn = val
     },
-    onSelectEventHandler (val) {
-      let content = this.array.filter(item => item.questionId === val)
+    onGroupEventHandler (val) {
+      if (val) {
+        this.group = val
+        this.groupID++
+        this.$emit('groupChange', val)
+      }
+    },
+    // onQuestionEventHandler (val) {
+    //   if (val) {
+    //     this.question = val
+    //     this.questionID++
+    //   }
+    // },
+    onQuestionEventHandler (val) {
+      let content = this.questions.filter(item => item.questionId === val)
       let arr = []
       if (content[0].optionTexts.length > 0) {
         content[0].optionTexts.forEach((item, index) => {
@@ -109,14 +137,21 @@ export default {
         })
       }
       if (val) {
-        this.select = val
-        this.selected++
+        this.question = val
+        this.questionID++
         this.inputOptions = arr.concat()
       }
     },
     onSubmitEventHandler () {
-      let content = this.array.filter(item => item.questionId === this.select)
-      this.$emit('callback', {'QuesOptionValues': this.QuesOptionValues.toString(), 'QuesOptionTexts': this.QuesOptionTexts.toString(), 'questionID': this.select, 'questionContent': '"' + content[0].quesText + '"这一题，受访者给出的答案是什么？', 'questionSn': this.inputSn, 'QuesType': '3009'})
+      let content = this.questions.filter(item => item.questionId === this.question)
+      this.$emit('callback', {
+        'QuesOptionValues': this.QuesOptionValues.toString(),
+        'QuesOptionTexts': this.QuesOptionTexts.toString(), 
+        'questionID': this.question, 
+        'questionContent': content[0].quesText + ' 这一题，受访者给出的答案是什么？', 
+        'questionSn': this.inputSn, 
+        'QuesType': '3009'
+      })
     }
   }
 }

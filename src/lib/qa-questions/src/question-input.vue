@@ -38,10 +38,11 @@
         <don-qa-question-wrap label="题目类型" v-if="!fill">
           <pku-radio
             importKey="name"
-            exportKey="id"
+            exportKey="key"
             :message="options"
             class="wrap-input"
-            ref="input"></pku-radio>
+            ref="type"
+            @callback="onRadioEventHandler"></pku-radio>
         </don-qa-question-wrap>
         <don-qa-question-wrap label="最小长度" v-if="!fill">
           <pku-input
@@ -66,7 +67,7 @@
     </pku-tab>
   </div>
   <div class="don-qa-question-input" v-else>
-    <pku-input class="wrap-input"></pku-input>
+    <pku-input class="wrap-input" v-if="importType === '0100'"></pku-input>
   </div>
 </template>
 
@@ -77,6 +78,10 @@ export default {
     fill: {
       type: Boolean,
       default: false
+    },
+    importType: {
+      type: String,
+      default: '0100'
     },
     res: {
       type: Object,
@@ -95,23 +100,29 @@ export default {
     return {
       list: ['问题设置', '个性设置'],
       options: [
-        { name: '文本', key: 1 },
-        { name: '密码', key: 5 },
-        { name: '纯文字', key: 9 }
+        { name: '文本', key: '0100' },
+        // { name: '密码', key: '0101' },
+        { name: '纯文字', key: '0102' }
       ],
       inputSn: '',
       inputTitle: '',
       inputMin: '',
       inputMax: '',
-      message: ''
+      message: '',
+      type: '0100'
     }
   },
   mounted () {
     if (this.fill && this.res) {
-      this.$children[0].$data.value = this.res.quesOptions[0]
+      // this.$children[0].$data.value = this.res.quesOptions[0]
+    } else {
+      this.$refs.type.$data.value = 0
     }
   },
   methods: {
+    onRadioEventHandler (val) {
+      this.type = val
+    },
     // 这个题目类型是用questType来区别的。文本题：0100、密码题：0101、纯文字：0102。
     // 你截图部分的是文本化的显示。原系统是用onclick事件做的。
     onSnEventHandler (val) {
@@ -133,7 +144,7 @@ export default {
       this.$emit('callback', {
         'questionContent': this.inputTitle,
         'questionSn': this.inputSn,
-        'QuesType': '0100',
+        'QuesType': this.type,
         'minCharacter': Number(this.inputMin),
         'maxCharacter': Number(this.inputMax)
       })

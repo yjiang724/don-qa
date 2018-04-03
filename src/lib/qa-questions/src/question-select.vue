@@ -44,7 +44,11 @@
     </pku-tab>
   </div>
   <div class="don-qa-question-select" v-else>
-  123
+     <pku-radio
+        importKey="name"
+        exportKey="value"
+        :disabled="false"
+        :message="options"></pku-radio>
   </div>
 </template>
 
@@ -57,9 +61,18 @@ export default {
       default: false
     },
     res: {
+      type: Object,
+      default () {
+        return null
+      }
+    },
+    options: {
       type: Array,
       default () {
-        return [null, null, null]
+        return [
+          { name: '是', value: 1 },
+          { name: '无法判断', value: 9 }
+        ]
       }
     }
   },
@@ -71,6 +84,15 @@ export default {
       ],
       inputSn: undefined,
       inputTitle: undefined
+    }
+  },
+  mounted () {
+    if (this.fill && this.res) {
+      this.res.quesOptions.forEach((item, index) => {
+        if (item !== null) {
+          this.$children[0].$data.value = index
+        }
+      })
     }
   },
   methods: {

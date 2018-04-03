@@ -1,7 +1,7 @@
 {
   "name": "don-qa",
   "description": "A questionnaire UI Toolkit for vue.js",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "JIANG Yu <look@jiangyu.me>",
   "license": "MIT",
   "private": false,
@@ -11,6 +11,7 @@
     "build": "npm run dist && npm run dist"
   },
   "dependencies": {
+    "ssri": "^5.3.0",
     "vue": "^2.5.11"
   },
   "browserslist": [

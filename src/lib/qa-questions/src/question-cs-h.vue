@@ -6,15 +6,24 @@
         ref="input"
         @change="onInputEventHandler"></pku-input>
     </don-qa-question-wrap>
+    <don-qa-question-wrap label="问题组">
+      <pku-select
+        class="wrap-select"
+        selected="选择问题组"
+        :list="array"
+        importKey="quesText"
+        exportKey="questionId"
+        @callback="onGroupEventHandler"></pku-select>
+    </don-qa-question-wrap>
     <don-qa-question-wrap label="题干">
       <pku-select
         class="wrap-select"
-        selected="访员是否至少追问一次？ "
+        selected="访员是否至少追问一次？"
+        :list="questions"
+        :html="true"
         importKey="quesText"
         exportKey="questionId"
-        :list="array"
-        :html="true"
-        @callback="onSelectEventHandler"></pku-select>
+        @callback="onQuestionEventHandler"></pku-select>
     </don-qa-question-wrap>
     <don-qa-question-wrap>
       <pku-radio
@@ -26,8 +35,8 @@
     <don-qa-question-wrap>
       <pku-button
         value="保存"
-        :class="{'btn-primary': true, 'btn-disabled': selected * input.length === 0}"
-        :disabled="selected * input.length === 0"
+        :class="{'btn-primary': true, 'btn-disabled': questionID * groupID * inputSn.length === 0}"
+        :disabled="questionID * groupID * inputSn.length === 0"
         @callback="onSubmitEventHandler"></pku-button>
     </don-qa-question-wrap>
   </div>
@@ -55,6 +64,12 @@ export default {
         return ['题目1', '题目2', '题目3']
       }
     },
+    questions: {
+      type: Array,
+      default () {
+        return ['题目1', '题目2', '题目3']
+      }
+    },
     res: {
       type: Object,
       default () {
@@ -73,9 +88,11 @@ export default {
   },
   data () {
     return {
-      selected: 0,
-      input: '',
-      select: undefined
+      groupID: 0,
+      questionID: 0,
+      group: undefined,
+      question: undefined,
+      inputSn: ''
     }
   },
   mounted () {
@@ -89,17 +106,31 @@ export default {
   },
   methods: {
     onInputEventHandler (val) {
-      this.input = val
+      this.inputSn = val
     },
-    onSelectEventHandler (val) {
+    onGroupEventHandler (val) {
       if (val) {
-        this.select = val
-        this.selected++
+        this.group = val
+        this.groupID++
+        this.$emit('groupChange', val)
+      }
+    },
+    onQuestionEventHandler (val) {
+      if (val) {
+        this.question = val
+        this.questionID++
       }
     },
     onSubmitEventHandler () {
-      let content = this.array.filter(item => item.questionId === this.select)
-      this.$emit('callback', {'QuesOptionValues': '1,5', 'QuesOptionTexts': '是,否', 'questionID': this.select, 'questionContent': '"' + content[0].quesText + '"一题，访员是否至少追问一次？', 'questionSn': this.input, 'QuesType': '3007'})
+      let content = this.questions.filter(item => item.questionId === this.question)
+      this.$emit('callback', {
+        'QuesOptionValues': '1,5',
+        'QuesOptionTexts': '是,否',
+        'questionID': this.question, 
+        'questionContent': content[0].quesText + ' 一题，访员是否至少追问一次？', 
+        'questionSn': this.inputSn,
+        'QuesType': '3007'
+      })
     }
   }
 }
@@ -107,5 +138,8 @@ export default {
 <style scoped>
 .wrap-input, .wrap-select {
   margin-bottom: 20px;
+}
+div.don-qa-question-cs-h >>> .don-qa-question-wrap label {
+  font-size: 14px;
 }
 </style>

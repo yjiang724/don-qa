@@ -2,6 +2,10 @@
 
 
 # Version
+- 0.2.0 beta 4/3/2018
+    - 对文件结构重新部署
+    - 对所有题型增加问题组和问题题干部分，移除了题目标题部分
+    - 对题型 `<don-qa-question-a>` 增加了选中后的编辑、撤销、提交功能
 - 0.1.0 beta 1/15/2018
     - add compontent
         - `<don-qa-question-a>`

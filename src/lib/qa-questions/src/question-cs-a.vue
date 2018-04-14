@@ -10,9 +10,10 @@
       <pku-select
         class="wrap-select"
         selected="选择问题组"
-        :list="array"
+        ref="group"
         importKey="quesText"
         exportKey="questionId"
+        :list="array"
         @callback="onGroupEventHandler"></pku-select>
     </don-qa-question-wrap>
     <don-qa-question-wrap label="题干">
@@ -28,17 +29,7 @@
         :html="true"
         @callback="onQuestionEventHandler">
       </component>
-      <!-- <pku-select
-        class="wrap-select"
-        selected="访员是否提问了下面这一题相关内容？"
-        importKey="quesText"
-        exportKey="questionId"
-        ref="host"
-        :style="{width: reWrite ? '80%' : 'unset'}"
-        :list="questions"
-        :html="true"
-        @callback="onQuestionEventHandler"></pku-select> -->
-      <pku-edit v-if="reWrite && this.question" :showFunc="showFunc" :cancelFunc="cancelFunc" :submitFunc="submitFunc"></pku-edit>
+      <pku-edit v-if="opt || (reWrite && this.question )" :showFunc="showFunc" :cancelFunc="cancelFunc" :submitFunc="submitFunc" ref="edit"></pku-edit>
     </don-qa-question-wrap>
     <don-qa-question-wrap>
       <pku-radio
@@ -50,8 +41,8 @@
     <don-qa-question-wrap>
       <pku-button
         value="保存"
-        :class="{'btn-primary': true, 'btn-disabled': questionID * groupID * inputSn.length === 0}"
-        :disabled="questionID * groupID * inputSn.length === 0"
+        :class="{'btn-primary': true, 'btn-disabled': (questionID * groupID * inputSn.length === 0) && question.length === 0}"
+        :disabled="(questionID * groupID * inputSn.length === 0) && question.length === 0"
         @callback="onSubmitEventHandler"></pku-button>
     </don-qa-question-wrap>
   </div>
@@ -103,6 +94,9 @@ export default {
           { name: '无法判断', key: 9 }
         ]
       }
+    },
+    opt: {
+      type: Object
     }
   },
   data () {
@@ -110,9 +104,34 @@ export default {
       reWriteName: 'pkuSelect',
       groupID: 0,
       questionID: 0,
-      group: undefined,
-      question: undefined,
-      inputSn: ''
+      group: '',
+      question: '',
+      inputSn: '',
+      tmpSelected: ''
+    }
+  },
+  watch: {
+    array (val) {
+      console.log('opt', this.opt, val)
+      if (this.opt) {
+        let tmp = val.filter(item => item.questionId === this.opt.relatedQuesGroupID)
+        this.question = this.opt.quesId
+        this.$refs.input.value = this.opt.quesSn
+        this.$emit('groupChange', this.opt.relatedQuesGroupID)
+        this.$refs.host.value = this.opt.quesText.split('____________')[0]
+        this.$refs.group.value = tmp[0] ? tmp[0].quesText : '无此QuestionGroup'
+      }
+    },
+    opt (val) {
+      console.log('opt1', this.opt, val)
+      if (this.array) {
+        let tmp = this.array.filter(item => item.questionId === this.opt.relatedQuesGroupID)
+        this.question = this.opt.quesId
+        this.$refs.input.value = this.opt.quesSn
+        this.$emit('groupChange', this.opt.relatedQuesGroupID)
+        this.$refs.host.value = this.opt.quesText.split('____________')[0]
+        this.$refs.group.value = tmp[0] ? tmp[0].quesText : '无此QuestionGroup'
+      }
     }
   },
   mounted () {
@@ -126,20 +145,43 @@ export default {
   },
   methods: {
     showFunc () {
-      let tmp = this.questions.filter(item => item.questionId === this.question)
+      this.tmpSelected = this.$refs.host.value
       this.reWriteName = 'pkuInput'
       this.$nextTick(() => {
-        this.$refs.host.value = tmp[0].quesText
+        if (this.opt) {
+          this.$refs.host.value = this.tmpSelected
+        } else {
+          // let tmp = this.questions.filter(item => item.questionId === this.question)
+          // this.$refs.host.value = '访员是否提问了 ' + tmp[0].quesText + ' 一题相关内容？'
+          this.$refs.host.value = this.tmpSelected
+        }
       })
     },
     submitFunc () {
+      let title = this.$refs.host.value
       this.reWriteName = 'pkuSelect'
+      this.$nextTick(() => {
+        if (this.opt) {
+          this.$refs.host.value = title
+        } else {
+          this.$refs.host.value = title
+          // let tmp = this.questions.filter(item => item.questionId === this.question)
+          // this.$refs.host.value = '访员是否提问了 ' + tmp[0].quesText + ' 一题相关内容？'
+        }
+      })
+      this.tmpSelected = ''
     },
     cancelFunc () {
       this.reWriteName = 'pkuSelect'
-      let tmp = this.questions.filter(item => item.questionId === this.question)
       this.$nextTick(() => {
-        this.$refs.host.value = tmp[0].quesText || '访员是否提问了下面这一题相关内容？'
+        if (this.opt) {
+          // this.$refs.host.value = this.opt.quesText.split('____________')[0]
+          this.$refs.host.value = this.tmpSelected
+        } else {
+          // let tmp = this.questions.filter(item => item.questionId === this.question)
+          // this.$refs.host.value = '访员是否提问了 ' + tmp[0].quesText + ' 一题相关内容？' || '访员是否提问了下面这一题相关内容？'
+          this.$refs.host.value = this.tmpSelected
+        }
       })
     },
     onInputEventHandler (val) {
@@ -152,8 +194,15 @@ export default {
         if (this.reWrite) {
           this.reWriteName = 'pkuSelect'
         }
-        this.$refs.host.reset()
-        this.question = undefined
+        if (this.opt) {
+          this.$refs.edit.show = false
+          this.$refs.host.value = this.opt.quesText.split('____________')[0]
+        } else {
+          this.$nextTick(() => {
+            this.$refs.host.reset()
+          })
+        }
+        this.question = ''
         this.questionID = 0
         this.$emit('groupChange', val)
       }
@@ -162,16 +211,19 @@ export default {
       if (val) {
         this.question = val
         this.questionID++
+        this.$refs.host.value = '访员是否提问了 ' + this.$refs.host.value + ' 一题相关内容？'
       }
     },
     onSubmitEventHandler () {
       let content = this.questions.filter(item => item.questionId === this.question)
       this.$emit('callback', {
+        'type': this.opt ? 'put' : 'post',
         'QuesOptionValues': '1,5,9',
         'QuesOptionTexts': '是,否,无法判断',
         'questionID': this.question,
-        'questionContent': '访员是否提问了 ' + content[0].quesText + ' 一题相关内容？',
-        'questionSn': this.inputSn, 'QuesType': '3000'
+        'questionContent': this.$refs.host.value,
+        'questionSn': this.inputSn,
+        'QuesType': '3000'
       })
     }
   }

@@ -1,11 +1,12 @@
 <template>
   <div class="don-qa-init">
     <pku-form class="form" :inline="inline" :style="{ width: maxlength + 'px' }">
-      <pku-form-item v-for="(item, idx) in message" :label="item.label">
+      <pku-form-item v-for="(item, idx) in value" :label="item.label">
         <component v-bind:is="item.name" v-bind:data-key="item.key" v-bind="item.options" ref="response" @callback="onWatchEventHandler($event, item.key)"></component>
       </pku-form-item>
       <pku-form-item>
         <pku-button
+          v-if="reset"
           class="btn-default"
           value="重置"
           @callback="onReset"></pku-button>
@@ -30,6 +31,10 @@ export default {
       type: String,
       default: ''
     },
+    reset: {
+      type: Boolean,
+      default: true
+    },
     message: {
       type: Array,
       default () {
@@ -48,9 +53,13 @@ export default {
   },
   data () {
     return {
+      value: this.message
     }
   },
   watch: {
+    message (val) {
+      this.value = val
+    }
   },
   methods: {
     onWatchEventHandler (evt, item) {

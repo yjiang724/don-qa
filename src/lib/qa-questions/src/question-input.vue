@@ -115,7 +115,7 @@ export default {
   mounted () {
     if (this.fill && this.res) {
       // this.$children[0].$data.value = this.res.quesOptions[0]
-    } else {
+    } else if (!this.fill) {
       this.$refs.type.$data.value = 0
     }
   },

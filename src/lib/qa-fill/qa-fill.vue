@@ -132,71 +132,102 @@ export default {
       this.$emit('prev')
     },
     onSubmitEventHandler () {
-      let tmp = JSON.parse(this.groups).concat()
-      let count = 0
-      let res = []
-      tmp.forEach(item => {
-        item.forEach(val => {
-          val.questionID = val.quesId
-          delete val.quesId
-          delete val.quesRequired
-          delete val.quesAllowRefused
-          delete val.quesText
-          delete val.quesTimer
-          delete val.quesTipVisible
-          delete val.quesRandomized
-          delete val.quesSn
-          delete val.colOptions
-          delete val.colOptionTexts
-          delete val.rowOptionTexts
-          delete val.quesOptionTexts
-          delete val.colOrders
-          delete val.rowOptions
-          delete val.rowOrders
-          if (val.quesType === '0001') {
-            let num = this.$refs.res[count].$children[0].$data.value
-            val.a = [val.optionOrders[num]]
-            val.b = [val.quesOptions[num]]
-            delete val.optionOrders
-            val.optionOrders = val.a.concat()
-            delete val.quesOptions
-            val.quesOptions = val.b.concat()
-            delete val.a
-            delete val.b
-            res.push(val)
-          } else if (val.quesType === '0100') {
-            let num = this.$refs.res[count].$children[0].$data.value
-            // delete val.optionOrders
-            val.optionOrders = ['0']
-            // delete val.quesOptions
-            val.quesOptions = [num]
-            res.push(val)
-          } else if (val.quesType === '0102') {
-          } else if (val.quesType === '0600' || val.quesType === '0601') {
-            let num = this.$refs.res[count].$children[0].$data.voidStart + this.$refs.res[count].$children[0].$data.nowValue
-            delete val.optionOrders
-            val.optionOrders = ['0']
-            delete val.quesOptions
-            val.quesOptions = [num]
-            res.push(val)
-          } else {
-            let num = this.$refs.res[count].$children[0].$data.value
-            val.a = [val.optionOrders[num]]
-            val.b = [val.quesOptions[num]]
-            delete val.optionOrders
-            val.optionOrders = val.a.concat()
-            delete val.quesOptions
-            val.quesOptions = val.b.concat()
-            delete val.a
-            delete val.b
-            res.push(val)
+      // let len = this.$refs.res.length
+      let tmpCount = 0
+      this.$refs.res.forEach(singleQuestion => {
+        let name = singleQuestion.$options.name
+        if (name === 'donQuestionInput') {
+          if (singleQuestion.$children[0]) {
+            if (singleQuestion.$children[0].$data.value.length === 0) {
+              tmpCount++
+            }
           }
-          count++
+        } else if( name === 'donQuestionRate') {
+          if (singleQuestion.$children[0].$data.clickID === -1) {
+            tmpCount++
+          }
+        } else if (name === 'donQuestionSelect') {
+          if (singleQuestion.$children[0].$data.value === false) {
+            tmpCount++
+          }
+        } else {
+          if (singleQuestion.$children[0].$data.value === false) {
+            tmpCount++
+          }
+        }
+      })
+      if (tmpCount > 0) {
+        this.$emit("callback", {
+          answersStr: 'notfilled'
         })
-      })
-      this.$emit("callback", {
-        answersStr: res
-      })
+      } else {
+        let tmp = JSON.parse(this.groups).concat()
+        let count = 0
+        let res = []
+        tmp.forEach(item => {
+          item.forEach(val => {
+            val.questionID = val.quesId
+            delete val.quesId
+            delete val.quesRequired
+            delete val.quesAllowRefused
+            delete val.quesText
+            delete val.quesTimer
+            delete val.quesTipVisible
+            delete val.quesRandomized
+            delete val.quesSn
+            delete val.colOptions
+            delete val.colOptionTexts
+            delete val.rowOptionTexts
+            delete val.quesOptionTexts
+            delete val.colOrders
+            delete val.rowOptions
+            delete val.rowOrders
+            console.log(this.$refs.res[count])
+            if (val.quesType === '0001') {
+              let num = this.$refs.res[count].$children[0].$data.value
+              val.a = [val.optionOrders[num]]
+              val.b = [val.quesOptions[num]]
+              delete val.optionOrders
+              val.optionOrders = val.a.concat()
+              delete val.quesOptions
+              val.quesOptions = val.b.concat()
+              delete val.a
+              delete val.b
+              res.push(val)
+            } else if (val.quesType === '0100') {
+              let num = this.$refs.res[count].$children[0].$data.value
+              // delete val.optionOrders
+              val.optionOrders = ['0']
+              // delete val.quesOptions
+              val.quesOptions = [num]
+              res.push(val)
+            } else if (val.quesType === '0102') {
+            } else if (val.quesType === '0600' || val.quesType === '0601') {
+              let num = this.$refs.res[count].$children[0].$data.voidStart + this.$refs.res[count].$children[0].$data.nowValue
+              delete val.optionOrders
+              val.optionOrders = ['0']
+              delete val.quesOptions
+              val.quesOptions = [num]
+              res.push(val)
+            } else {
+              let num = this.$refs.res[count].$children[0].$data.value
+              val.a = [val.optionOrders[num]]
+              val.b = [val.quesOptions[num]]
+              delete val.optionOrders
+              val.optionOrders = val.a.concat()
+              delete val.quesOptions
+              val.quesOptions = val.b.concat()
+              delete val.a
+              delete val.b
+              res.push(val)
+            }
+            count++
+          })
+        })
+        this.$emit("callback", {
+          answersStr: res
+        })
+      }
     }
   }
 }

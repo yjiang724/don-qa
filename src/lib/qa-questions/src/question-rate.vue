@@ -112,10 +112,12 @@ export default {
   },
   mounted () {
     if (this.fill) {
-      this.$children[0].$data.start = Number(this.res.recomStartNum[0])
-      this.$children[0].$data.max = Number(this.res.valueCount[0])
-      this.$children[0].$data.clickID = this.res.quesOptions[0] - this.res.recomStartNum[0]
-      this.$children[0].$data.nowValue = this.res.quesOptions[0] - this.res.recomStartNum[0]
+      if (this.res) {
+        this.$children[0].$data.start = Number(this.res.recomStartNum[0])
+        this.$children[0].$data.max = Number(this.res.valueCount[0])
+        this.$children[0].$data.clickID = this.res.quesOptions[0] - this.res.recomStartNum[0]
+        this.$children[0].$data.nowValue = this.res.quesOptions[0] - this.res.recomStartNum[0]
+      }
     } else {
       this.$refs.type.$data.value = 0
     }

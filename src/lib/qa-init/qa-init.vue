@@ -75,7 +75,7 @@ export default {
             idx++
           }
         } else if (item.$options.name === 'pkuSwitch') {
-          res[item.$el.dataset.key] = item.on
+          res[item.$el.dataset.key] = item.value
         } else {
           if (!item.value) {
             idx++

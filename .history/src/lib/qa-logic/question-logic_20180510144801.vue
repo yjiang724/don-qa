@@ -172,7 +172,7 @@ export default {
           this.option = this.options[this.type]
           this.$emit('selected', { idx: id, value: evt })
         } else if (tag === 'b') {
-          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked' || evt === 'equal' || evt === 'notequal') {
+          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked') {
             flag = true
           }
         }

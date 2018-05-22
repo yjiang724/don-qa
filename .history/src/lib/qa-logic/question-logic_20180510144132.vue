@@ -112,17 +112,17 @@ export default {
       styleObj: {
         width: '30%'
       },
-      type: '0001',
+      type: 'q0001',
       option: [],
       options: {
-        '0001': [
+        'q0001': [
           { value: 'skiporcheck', name: '跳过或选中' },
           { value: 'checked', name: '选中' },
           { value: 'notchecked', name: '未选中' },
           { value: 'unknown', name: '选择不知道' },
           { value: 'refuse', name: '选择拒绝回答' }
         ],
-        '0002': [
+        'q0002': [
           { value: 'skiporcheck', name: '跳过或选中' },
           { value: 'checked', name: '选中' },
           { value: 'notchecked', name: '未选中' },
@@ -130,13 +130,13 @@ export default {
           { value: 'unknown', name: '选择不知道' },
           { value: 'refuse', name: '选择拒绝回答' }
         ],
-        '0100': [
+        'q0100': [
           { value: 'equal', name: '等于' },
           { value: 'notequal', name: '不等于' },
           { value: 'unknown', name: '选择不知道' },
           { value: 'refuse', name: '选择拒绝回答' }
         ],
-        '0200': [
+        'q0200': [
           { value: 'less', name: '等于' },
           { value: 'equal', name: '不等于' },
           { value: 'great', name: '选择不知道' },
@@ -163,16 +163,11 @@ export default {
       if (val === 2) {
         if (tag === 'a') {
           // add here
-          this.type = this.source.filter(item => {
-            return item.quesID === evt
-          })[0].quesType
-          if (this.type >= 3000) {
-            this.type = '0001'
-          }
-          this.option = this.options[this.type]
+          this.type = this.list.filter(item => return item.quesID === evt)[0].quesType
+          console.log(id, evt, 123)
           this.$emit('selected', { idx: id, value: evt })
         } else if (tag === 'b') {
-          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked' || evt === 'equal' || evt === 'notequal') {
+          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked') {
             flag = true
           }
         }

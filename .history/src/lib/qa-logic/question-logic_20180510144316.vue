@@ -163,16 +163,14 @@ export default {
       if (val === 2) {
         if (tag === 'a') {
           // add here
-          this.type = this.source.filter(item => {
-            return item.quesID === evt
-          })[0].quesType
-          if (this.type >= 3000) {
+          this.type = this.list.filter(item => return item.quesID === evt)[0].quesType
+          if (this.type > 3000) {
             this.type = '0001'
           }
           this.option = this.options[this.type]
           this.$emit('selected', { idx: id, value: evt })
         } else if (tag === 'b') {
-          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked' || evt === 'equal' || evt === 'notequal') {
+          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked') {
             flag = true
           }
         }

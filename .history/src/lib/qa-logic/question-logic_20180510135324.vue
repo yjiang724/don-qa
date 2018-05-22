@@ -47,7 +47,7 @@
           selected="请选择跳转逻辑"
           importKey="name"
           exportKey="value"
-          :list="option"
+          :list="options"
           :style="styleObj"
           @callback="onSelectEventHandler($event, 2, id, 'b')"></pku-select>
         <transition name="input">
@@ -112,8 +112,6 @@ export default {
       styleObj: {
         width: '30%'
       },
-      type: '0001',
-      option: [],
       options: {
         '0001': [
           { value: 'skiporcheck', name: '跳过或选中' },
@@ -126,24 +124,7 @@ export default {
           { value: 'skiporcheck', name: '跳过或选中' },
           { value: 'checked', name: '选中' },
           { value: 'notchecked', name: '未选中' },
-          { value: 'in', name: '包含' },
           { value: 'unknown', name: '选择不知道' },
-          { value: 'refuse', name: '选择拒绝回答' }
-        ],
-        '0100': [
-          { value: 'equal', name: '等于' },
-          { value: 'notequal', name: '不等于' },
-          { value: 'unknown', name: '选择不知道' },
-          { value: 'refuse', name: '选择拒绝回答' }
-        ],
-        '0200': [
-          { value: 'less', name: '等于' },
-          { value: 'equal', name: '不等于' },
-          { value: 'great', name: '选择不知道' },
-          { value: 'notequal', name: '选择拒绝回答' },
-          { value: 'lessequal', name: '选择拒绝回答' },
-          { value: 'greatequal', name: '选择拒绝回答' },
-          { value: 'unknown', name: '选择拒绝回答' },
           { value: 'refuse', name: '选择拒绝回答' }
         ]
       },
@@ -162,17 +143,9 @@ export default {
       let flag = false
       if (val === 2) {
         if (tag === 'a') {
-          // add here
-          this.type = this.source.filter(item => {
-            return item.quesID === evt
-          })[0].quesType
-          if (this.type >= 3000) {
-            this.type = '0001'
-          }
-          this.option = this.options[this.type]
           this.$emit('selected', { idx: id, value: evt })
         } else if (tag === 'b') {
-          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked' || evt === 'equal' || evt === 'notequal') {
+          if (evt === 'skiporcheck' || evt === 'checked' || evt === 'notchecked') {
             flag = true
           }
         }

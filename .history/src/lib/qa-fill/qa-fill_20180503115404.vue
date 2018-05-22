@@ -203,8 +203,7 @@ export default {
               res.push(val)
             } else if (val.quesType === '0102') {
             } else if (val.quesType === '0600' || val.quesType === '0601') {
-              console.log(this)
-              let num = this.$refs.res[count].$children[0].voidStart + this.$refs.res[count].$children[0].nowValue
+              let num = this.$refs.res[count].$children[0].$data.voidStart + this.$refs.res[count].$children[0].$data.nowValue
               delete val.optionOrders
               val.optionOrders = ['0']
               delete val.quesOptions

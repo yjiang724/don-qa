@@ -105,6 +105,13 @@ export default {
       let tmp = JSON.parse(this.content)
       let arr = tmp.filter(item => Number(item.indexForAns) === len)
       if (arr) {
+        if (this.options[index1][index2].quesType === '0600') {
+          // console.log()
+          console.log(len, arr, this.options[0][len])
+          arr[0].recomStartNum = this.options[0][len].recomStartNum
+          arr[0].valueCount = this.options[0][len].valueCount
+        }
+        // console.log(len, arr, this.options)
         return arr[0]
       } else {
         return null

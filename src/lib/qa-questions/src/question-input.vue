@@ -114,7 +114,8 @@ export default {
   },
   mounted () {
     if (this.fill && this.res) {
-      // this.$children[0].$data.value = this.res.quesOptions[0]
+      // console.log(this)
+      this.$children[0].$data.value = this.res.quesOptions[0]
     } else if (!this.fill) {
       this.$refs.type.$data.value = 0
     }

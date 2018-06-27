@@ -3,13 +3,13 @@
     <pku-tab
       :list="list">
       <div slot="slot_0">
-        <don-qa-question-wrap label="题目序号" v-if="!fill" ref="t1">
+        <don-qa-question-wrap label="题目序号" v-if="!fill">
           <pku-input
             class="wrap-input"
             ref="input"
             @change="onSnEventHandler"></pku-input>
         </don-qa-question-wrap>
-        <don-qa-question-wrap label="题目标题" v-if="!fill" ref="t2">
+        <don-qa-question-wrap label="题目标题" v-if="!fill">
           <pku-input
             class="wrap-input"
             ref="input"
@@ -21,7 +21,7 @@
             value="增加选项"
             @callback="onClickEventHadnler"></pku-button>
         </don-qa-question-wrap>
-        <transition-group name="list" tag="div" ref="t3">
+        <transition-group name="list" tag="div">
           <don-qa-question-wrap 
             class="list-item"
             v-for="(item, id) in selects"
@@ -66,9 +66,6 @@ export default {
         return null
       }
     },
-    opt: {
-      type: Object
-    },
     options: {
       type: Array,
       default () {
@@ -95,23 +92,6 @@ export default {
         if (item !== null) {
           this.$children[0].$data.value = index
         }
-      })
-    } else {
-      this.$refs.t1.$children[0].$data.value = this.opt.quesText
-      this.$refs.t2.$children[0].$data.value = this.opt.quesSn
-      this.selects = []
-      console.log(this, 2)
-      this.opt.quesOptions.forEach((item, id) => {
-        this.selects.push({
-          sn: item,
-          val: this.opt.quesOptionTexts[id]
-        })
-      })
-      this.$nextTick(() => {
-        this.opt.quesOptions.forEach((item, id) => {
-          this.$refs.t3.$children[id].$children[0].$data.value = item
-          this.$refs.t3.$children[id].$children[1].$data.value = this.opt.quesOptionTexts[id]
-        })
       })
     }
   },

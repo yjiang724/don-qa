@@ -1,6 +1,6 @@
 <template>
-  <div class="don-qa-question-cs-b" v-if="!fill">
-    <don-qa-question-wrap label="题目序号" ref="title1">
+  <div class="don-qa-question-cs-a" v-if="!fill">
+    <don-qa-question-wrap label="题目序号">
       <pku-input
         class="wrap-input"
         ref="input"
@@ -20,7 +20,7 @@
       <component
         class="wrap-select"
         :is="reWriteName"
-        selected="受访者是否回答了以下一题相关内容？"
+        selected="访员是否提问了下面这一题相关内容？"
         importKey="quesText"
         exportKey="questionId"
         ref="host"
@@ -46,7 +46,7 @@
         @callback="onSubmitEventHandler"></pku-button>
     </don-qa-question-wrap>
   </div>
-  <div class="don-qa-question-cs-b" v-else>
+  <div class="don-qa-question-cs-a" v-else>
      <pku-radio
         importKey="name"
         exportKey="id"
@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: 'donQuestionCsB',
+  name: 'donQuestionCsA',
   props: {
     reWrite: {
       type: Boolean,
@@ -116,9 +116,7 @@ export default {
       if (this.opt) {
         let tmp = val.filter(item => item.questionId === this.opt.relatedQuesGroupID)
         this.question = this.opt.quesId
-        console.log(this.$refs, this, 234)
         this.$refs.input.value = this.opt.quesSn
-        this.$refs.title1.$children[0].$data.value = this.opt.quesSn
         this.$emit('groupChange', this.opt.relatedQuesGroupID)
         this.$refs.host.value = this.opt.quesText.split('____________')[0]
         this.$refs.group.value = tmp[0] ? tmp[0].quesText : '无此QuestionGroup'
@@ -143,15 +141,6 @@ export default {
           this.$children[0].$data.value = index
         }
       })
-      console.log(234)
-    } else {
-      console.log(111)
-      let tmp = this.array.filter(item => item.questionId === this.opt.relatedQuesGroupID)
-      this.question = this.opt.quesId
-      this.$refs.input.value = this.opt.quesSn
-      this.$emit('groupChange', this.opt.relatedQuesGroupID)
-      this.$refs.host.value = this.opt.quesText.split('____________')[0]
-      this.$refs.group.value = tmp[0] ? tmp[0].quesText : '无此QuestionGroup'
     }
   },
   methods: {
@@ -222,7 +211,7 @@ export default {
       if (val) {
         this.question = val
         this.questionID++
-        this.$refs.host.value = '受访者是否回答了 ' + this.$refs.host.value + ' 一题相关内容？'
+        this.$refs.host.value = '访员是否提问了 ' + this.$refs.host.value + ' 一题相关内容？'
       }
     },
     onSubmitEventHandler () {
@@ -234,7 +223,7 @@ export default {
         'questionID': this.question,
         'questionContent': this.$refs.host.value,
         'questionSn': this.inputSn,
-        'QuesType': '3001'
+        'QuesType': '3000'
       })
     }
   }
@@ -244,7 +233,7 @@ export default {
 .wrap-input, .wrap-select {
   margin-bottom: 20px;
 }
-div.don-qa-question-cs-b >>> .don-qa-question-wrap label {
+div.don-qa-question-cs-a >>> .don-qa-question-wrap label {
   font-size: 14px;
 }
 </style>

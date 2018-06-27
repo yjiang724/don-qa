@@ -3,13 +3,13 @@
     <pku-tab
       :list="list">
       <div slot="slot_0">
-        <don-qa-question-wrap label="题目序号" v-if="!fill" ref="t1">
+        <don-qa-question-wrap label="题目序号" v-if="!fill">
           <pku-input
             class="wrap-input"
             ref="input"
             @change="onSnEventHandler"></pku-input>
         </don-qa-question-wrap>
-        <don-qa-question-wrap label="题目标题" v-if="!fill" ref="t2">
+        <don-qa-question-wrap label="题目标题" v-if="!fill">
           <pku-input
             class="wrap-input"
             ref="input"
@@ -67,7 +67,7 @@
     </pku-tab>
   </div>
   <div class="don-qa-question-input" v-else>
-    <pku-input class="wrap-input" v-if="importType === '0100' || importType === '0102'"></pku-input>
+    <pku-input class="wrap-input" v-if="importType === '0100'"></pku-input>
   </div>
 </template>
 
@@ -78,9 +78,6 @@ export default {
     fill: {
       type: Boolean,
       default: false
-    },
-    opt: {
-      type: Object
     },
     importType: {
       type: String,
@@ -112,7 +109,7 @@ export default {
       inputMin: '',
       inputMax: '',
       message: '',
-      type: this.opt.quesType || '0100'
+      type: '0100'
     }
   },
   mounted () {
@@ -120,10 +117,7 @@ export default {
       // console.log(this)
       this.$children[0].$data.value = this.res.quesOptions[0]
     } else if (!this.fill) {
-      // this.$refs.input[0].value
-      // console.log(0, this)
-      this.$refs.t1.$children[0].$data.value = this.opt.quesText
-      this.$refs.t2.$children[0].$data.value = this.opt.quesSn
+      this.$refs.type.$data.value = 0
     }
   },
   methods: {
